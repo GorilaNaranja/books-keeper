@@ -19,7 +19,7 @@ public class SystemTest {
 
         Author[] authors = restTemplate.getForObject(url, Author[].class);
         Assertions.assertEquals(authors.length, 1);
-        Assertions.assertEquals(authors[0].getFirst_name(), "Felipe");
+        Assertions.assertEquals(authors[0].getFirstName(), "Felipe");
 
         restTemplate.delete(url + "/" + entity.getBody().getId());
         Assertions.assertEquals(authors.length, 0);

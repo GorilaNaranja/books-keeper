@@ -2,10 +2,10 @@ package com.feliopolis.bookskeeper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity(name = "author")
@@ -17,10 +17,11 @@ public class Author {
     private Long id;
 
     @Column(name = "first_name")
-    @NotBlank
+    @NotBlank(message = "First name cannot be blank")
     private String firstName;
 
-    private String last_name;
+    @Column(name = "last_name")
+    private String lastName;
 
     @OneToMany(mappedBy = "author")
     @JsonIgnore
@@ -30,9 +31,9 @@ public class Author {
 
     }
 
-    public Author(String firstName, String last_name) {
+    public Author(String firstName, String lastName) {
         this.firstName = firstName;
-        this.last_name = last_name;
+        this.lastName = lastName;
     }
 
     public Long getId() {
@@ -43,20 +44,20 @@ public class Author {
         this.id = id;
     }
 
-    public String getFirst_name() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirst_name(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public List<Book> getBooks() {

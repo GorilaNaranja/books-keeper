@@ -2,18 +2,16 @@ package com.feliopolis.bookskeeper.controllers;
 
 import com.feliopolis.bookskeeper.models.Author;
 import com.feliopolis.bookskeeper.repositories.AuthorRepository;
-import com.feliopolis.bookskeeper.utils.ErrorMessage;
 import com.feliopolis.bookskeeper.utils.FieldErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,16 +40,19 @@ public class AuthorController {
         return authorRepository.findByFirstName(firstName);
     }
 
-//    @PostMapping
-//    public Author create(@Valid @RequestBody Author author) {
-//        return authorRepository.save(author);
-//    }
-
     @PostMapping
-    public Author create(@RequestBody final Author author) throws ValidationException {
-        if (author.getFirst_name() != null && author.getLast_name() != null)
-            return authorRepository.save(author);
-        else throw new ValidationException("Author cannot be created");
+    public Author create(@Valid @RequestBody Author author) {
+        return authorRepository.save(author);
+    }
+
+    @Validated
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    List<FieldErrorMessage> exceptionHandle(MethodArgumentNotValidException e) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        List<FieldErrorMessage> fieldErrorMessages = fieldErrors.stream().map(fieldError -> new FieldErrorMessage(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+
+        return fieldErrorMessages;
     }
 
 //    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -94,15 +95,6 @@ public class AuthorController {
 //        authorRepository.deleteById(id);
 //    }
 
-
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    List<FieldErrorMessage> exceptionHandle(MethodArgumentNotValidException e) {
-//        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-//        List<FieldErrorMessage> fieldErrorsMessage = fieldErrors.stream().map(fieldError -> new FieldErrorMessage(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
-//
-//        return fieldErrorsMessage;
-//    }
 
 }
 

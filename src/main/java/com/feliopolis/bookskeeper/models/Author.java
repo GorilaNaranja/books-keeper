@@ -2,7 +2,6 @@ package com.feliopolis.bookskeeper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -21,10 +20,11 @@ public class Author {
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
     @OneToMany(mappedBy = "author")
-    @JsonIgnore
+//    @JsonIgnore
     private List<Book> books;
 
     public Author() {

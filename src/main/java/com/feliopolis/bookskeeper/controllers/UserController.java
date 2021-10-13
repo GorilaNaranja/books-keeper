@@ -1,15 +1,22 @@
 package com.feliopolis.bookskeeper.controllers;
 
+import com.feliopolis.bookskeeper.models.Author;
 import com.feliopolis.bookskeeper.models.User;
 import com.feliopolis.bookskeeper.repositories.UserRepository;
+import com.feliopolis.bookskeeper.utils.FieldErrorMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -26,34 +33,46 @@ public class UserController {
     @GetMapping
     @RequestMapping("{id}")
     public ResponseEntity<User> get(@PathVariable Long id) {
-
-        return new ResponseEntity<>(userRepository.getById(id), HttpStatus.OK);
-
-        //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        //try {
-        //return new ResponseEntity<User>(userRepository.getById(id), HttpStatus.OK);
-        //} catch (ResponseStatusException exception) {
-        // TODO: is catch working?
-        //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
-        //}
+        if (userRepository.findById(id).isPresent())
+            return new ResponseEntity<>(userRepository.getById(id), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
     }
 
     @PostMapping
-    public User create(@RequestBody final User user) {
-        return userRepository.saveAndFlush(user);
+    public User create(@Valid @RequestBody final User user) {
+        return userRepository.save(user);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        if (userRepository.findById(id).isPresent())
+            userRepository.deleteById(id);
+        else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        User savedUser = userRepository.getById(id);
-        BeanUtils.copyProperties(user, savedUser, "password", "id");
-        return userRepository.saveAndFlush(savedUser);
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
+
+        if (userRepository.findById(id).isPresent()) {
+            User savedUser = userRepository.getById(id);
+            BeanUtils.copyProperties(user, savedUser, "password", "id");
+            userRepository.saveAndFlush(savedUser);
+            return new ResponseEntity(savedUser, HttpStatus.OK);
+        } else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found");
+    }
+
+    @Validated
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    List<FieldErrorMessage> exceptionHandle(MethodArgumentNotValidException e) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        List<FieldErrorMessage> fieldErrorMessages = fieldErrors.stream().map(fieldError -> new FieldErrorMessage(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+
+        return fieldErrorMessages;
     }
 
 }

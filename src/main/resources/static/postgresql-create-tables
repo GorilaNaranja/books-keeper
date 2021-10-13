@@ -1,0 +1,57 @@
+-- Table: public.author
+
+-- DROP TABLE public.author;
+
+CREATE TABLE IF NOT EXISTS public.author
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    first_name text COLLATE pg_catalog."default",
+    last_name text COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.author
+    OWNER to postgres;
+
+
+
+-- Table: public.books
+
+-- DROP TABLE public.books;
+
+CREATE TABLE IF NOT EXISTS public.books
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name text COLLATE pg_catalog."default",
+    description text COLLATE pg_catalog."default",
+    author integer NOT NULL,
+    date date
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.books
+    OWNER to postgres;
+
+
+
+-- Table: public.users
+
+-- DROP TABLE public.users;
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    first_name text COLLATE pg_catalog."default" NOT NULL,
+    last_name text COLLATE pg_catalog."default" NOT NULL,
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    email text COLLATE pg_catalog."default" NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "Users_pkey" PRIMARY KEY (id),
+    CONSTRAINT email UNIQUE (email)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.users
+    OWNER to postgres;

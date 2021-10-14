@@ -13,7 +13,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String author;
+    private String author_id;
     private String name;
     private String description;
     private LocalDate date;
@@ -46,12 +46,12 @@ public class Book {
         this.description = description;
     }
 
-    public String getAuthor_id() {
-        return author;
+    public String getAuthorId() {
+        return author_id;
     }
 
-    public void setAuthor_id(String author) {
-        this.author = author;
+    public void setAuthorId(String author_id) {
+        this.author_id = author_id;
     }
 
     public LocalDate getDate() {

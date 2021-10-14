@@ -23,7 +23,7 @@ public class Author {
     @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author_id")
 //    @JsonIgnore
     private List<Book> books;
 

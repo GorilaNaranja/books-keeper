@@ -31,6 +31,8 @@ public class User {
     @NotBlank(message = "Password required")
     private String password;
 
+    private Boolean active = false;
+
 //    @OneToMany
 //    @JsonIgnore
 //    private List<Book> books;
@@ -77,5 +79,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

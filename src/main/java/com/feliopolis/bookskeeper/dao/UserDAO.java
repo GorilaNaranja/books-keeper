@@ -21,7 +21,7 @@ public class UserDAO {
     public User findUserAccount(String userName) {
         try {
             String sql = "Select e from " + User.class.getName() + " e " //
-                    + " Where e.userName = :userName ";
+                    + " Where e.firstName = :userName ";
 
             Query query = entityManager.createQuery(sql, User.class);
             query.setParameter("userName", userName);

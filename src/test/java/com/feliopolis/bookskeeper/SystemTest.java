@@ -14,7 +14,7 @@ public class SystemTest {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:3000/api/v1/authors";
 
-        Author author = new Author("Felipe", "Calderon");
+        Author author = new Author();
         ResponseEntity<Author> entity = restTemplate.postForEntity(url, author, Author.class);
 
         Author[] authors = restTemplate.getForObject(url, Author[].class);

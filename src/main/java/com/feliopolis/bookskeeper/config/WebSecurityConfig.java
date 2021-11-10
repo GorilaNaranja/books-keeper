@@ -61,6 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // AccessDeniedException will be thrown.
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
+
+        System.out.println("Login config? " + http.formLogin() );
         // Config for Login Form
         http.authorizeRequests().and().formLogin()//
                 // Submit URL of login page.

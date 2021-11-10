@@ -18,6 +18,6 @@ public class ExceptionHandlerController {
     ErrorMessage exceptionHandler(ValidationException e) {
         System.out.println("EXCEPTION HANDLER CONTROLLER");
 
-        return new ErrorMessage("400", e.getMessage());
+        return new ErrorMessage("500", e.getMessage());
     }
 }

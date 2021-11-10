@@ -34,6 +34,7 @@ public class MainController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(Model model) {
+        System.out.println("I'm on login page");
 
         return "loginPage";
     }

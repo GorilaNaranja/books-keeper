@@ -8,25 +8,25 @@ import javax.persistence.*;
 public class Role {
 
     @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "role_id", nullable = false)
+    private Long roleId;
 
     @Column(name = "role", nullable = false)
-    private String role;
+    private String roleName;
 
     public Long getId() {
-        return id;
+        return roleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getRole() {
-        return role;
+        return roleName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRole(String roleName) {
+        this.roleName = roleName;
     }
 }

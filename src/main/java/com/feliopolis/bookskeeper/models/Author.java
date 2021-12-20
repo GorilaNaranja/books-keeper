@@ -13,7 +13,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "first_name")
     @NotBlank(message = "First name cannot be blank")
@@ -23,7 +23,7 @@ public class Author {
     @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JsonIgnore
     private List<Book> books;
 
@@ -36,11 +36,11 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

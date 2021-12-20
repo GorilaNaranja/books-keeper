@@ -32,7 +32,7 @@ public class AuthorController {
 
     @GetMapping
     @RequestMapping("{id}")
-    public Author get(@PathVariable Long id) {
+    public Author get(@PathVariable Integer id) {
         return authorRepository.getById(id);
     }
 
@@ -48,12 +48,12 @@ public class AuthorController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Integer id) {
         authorRepository.deleteById(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Author> update(@PathVariable Long id, @RequestBody Author author) {
+    public ResponseEntity<Author> update(@PathVariable Integer id, @RequestBody Author author) {
         System.out.println(authorRepository.findById(id).isPresent());
         if (authorRepository.findById(id).isPresent()) {
             Author savedAuthor = authorRepository.getById(id);

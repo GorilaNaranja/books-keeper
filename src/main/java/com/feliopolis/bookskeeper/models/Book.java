@@ -3,6 +3,8 @@ package com.feliopolis.bookskeeper.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity(name = "books")
@@ -11,22 +13,31 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private String author;
+    //@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull(message = "Author may not be null")
+    private Integer author;
+
+    @NotBlank(message = "Name may not be blank")
     private String name;
+
     private String description;
+
     private LocalDate date;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     public Book() {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -46,11 +57,11 @@ public class Book {
         this.description = description;
     }
 
-    public String getAuthor_id() {
+    public Integer getAuthor() {
         return author;
     }
 
-    public void setAuthor_id(String author) {
+    public void setAuthor(Integer author) {
         this.author = author;
     }
 
@@ -61,4 +72,13 @@ public class Book {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }

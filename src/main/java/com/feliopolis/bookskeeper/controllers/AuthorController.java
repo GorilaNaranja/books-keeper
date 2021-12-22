@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ public class AuthorController {
 
     @GetMapping
     @RequestMapping("{id}")
-    public Author get(@PathVariable Integer id) {
+    public Author get(@PathVariable Long id) {
         return authorRepository.getById(id);
     }
 
@@ -48,12 +47,12 @@ public class AuthorController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         authorRepository.deleteById(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Author> update(@PathVariable Integer id, @RequestBody Author author) {
+    public ResponseEntity<Author> update(@PathVariable Long id, @RequestBody Author author) {
         System.out.println(authorRepository.findById(id).isPresent());
         if (authorRepository.findById(id).isPresent()) {
             Author savedAuthor = authorRepository.getById(id);

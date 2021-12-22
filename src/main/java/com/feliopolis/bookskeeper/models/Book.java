@@ -1,7 +1,6 @@
 package com.feliopolis.bookskeeper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,11 +12,12 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    //@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
     @NotNull(message = "Author may not be null")
-    private Integer author;
+    private Author author;
 
     @NotBlank(message = "Name may not be blank")
     private String name;
@@ -33,11 +33,11 @@ public class Book {
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,11 +57,11 @@ public class Book {
         this.description = description;
     }
 
-    public Integer getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 

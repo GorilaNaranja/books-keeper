@@ -12,7 +12,7 @@ public class SystemTest {
     public void createReadDeleteAuthorTest() {
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:3000/api/v1/authors";
+        String url = "http://localhost:5000/api/v1/authors";
 
         Author author = new Author();
         ResponseEntity<Author> entity = restTemplate.postForEntity(url, author, Author.class);

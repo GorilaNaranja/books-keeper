@@ -1,0 +1,20 @@
+INSERT INTO books (name, description, author, date)
+VALUES ('Bovedas de acero', 'SciFi book', 1, '1/1/1954');
+
+INSERT INTO books (name, description, author, date)
+VALUES ('El sol desnudo', 'SciFi book', 1, '1/1/1957');
+
+INSERT INTO books (name, description, author, date)
+VALUES ('Los robots del amanecer', 'SciFi book', 1, '1/1/1983');
+
+INSERT INTO books (name, description, author, date)
+VALUES ('Robots e imperio', 'SciFi book', 1, '1/1/1985');
+
+INSERT INTO books (name, description, author, date)
+VALUES ('La mano izquierda de la oscuridad', 'SciFi book', 2, '1/1/1969');
+
+INSERT INTO author (first_name, last_name)
+VALUES ('Isaac', 'Asimov');
+
+INSERT INTO author (first_name, last_name)
+VALUES ('Ursula', 'K. Le Guin');

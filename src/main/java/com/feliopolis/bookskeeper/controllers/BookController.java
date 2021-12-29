@@ -6,6 +6,7 @@ import com.feliopolis.bookskeeper.models.User;
 import com.feliopolis.bookskeeper.repositories.BookRepository;
 import com.feliopolis.bookskeeper.repositories.AuthorRepository;
 import com.feliopolis.bookskeeper.repositories.UserRepository;
+import com.feliopolis.bookskeeper.utils.ErrorMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,15 +29,18 @@ public class BookController {
     private AuthorRepository authorRepository;
 
     @GetMapping
-    public List<Book> list() {
-        return bookRepository.findAll();
+    public ResponseEntity list(@RequestParam(value = "author", required = false) Long id) {
+        if (id == null)
+            return new ResponseEntity<List<Book>>(bookRepository.findAll(), HttpStatus.OK);
+        else
+            return new ResponseEntity(bookRepository.findByAuthorId(id), HttpStatus.OK);
     }
 
-    //@GetMapping
-    //@RequestMapping
-    //Iterable<Author> findByQuery(@RequestParam(value = "author", required = false) String author) {
-    //    return bookRepository.findByAuthor(author);
-    //}
+    @GetMapping
+    @RequestMapping("")
+    Iterable<Book> findByQuery(@RequestParam(value = "id", required = false) Long id) {
+        return bookRepository.findByAuthorId(id);
+    }
 
     @GetMapping
     @RequestMapping("{id}")
@@ -44,12 +48,12 @@ public class BookController {
         if (bookRepository.findById(id).isPresent())
             return new ResponseEntity<Book>(bookRepository.getById(id), HttpStatus.OK);
         else
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book Not Found");
+            return new ResponseEntity(new ErrorMessage("404", "Book Not Found"), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
     public Book create(@Valid @RequestBody final Book book) {
-        if(!authorRepository.findById(book.getAuthor().getId()).isPresent())
+        if (!authorRepository.findById(book.getAuthor().getId()).isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author Not Found");
         else
             return bookRepository.saveAndFlush(book);

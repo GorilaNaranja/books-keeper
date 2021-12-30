@@ -1,15 +1,22 @@
 package com.feliopolis.bookskeeper.services;
 
+<<<<<<< Updated upstream
 import com.feliopolis.bookskeeper.dao.RoleDAO;
 import com.feliopolis.bookskeeper.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+=======
+import com.feliopolis.bookskeeper.models.User;
+import com.feliopolis.bookskeeper.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> Stashed changes
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+<<<<<<< Updated upstream
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,3 +60,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 }
+=======
+import org.springframework.transaction.annotation.Transactional;
+
+
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByFirstName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+
+        return UserDetailsImpl.build(user);
+    }
+}
+>>>>>>> Stashed changes

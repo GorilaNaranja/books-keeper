@@ -1,8 +1,18 @@
 package com.feliopolis.bookskeeper.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 
 @Entity
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserRole {
 
     @Id
@@ -18,27 +28,4 @@ public class UserRole {
     @JoinColumn(name = "role_id", nullable = false)
     private Role appRole;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(User appUser) {
-        this.appUser = appUser;
-    }
-
-    public Role getAppRole() {
-        return appRole;
-    }
-
-    public void setAppRole(Role appRole) {
-        this.appRole = appRole;
-    }
 }

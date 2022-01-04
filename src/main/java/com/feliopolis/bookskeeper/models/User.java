@@ -19,8 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 
     @Column(name = "first_name")
     //@NotNull(message = "First name may not be null")
@@ -39,13 +38,6 @@ public class User {
     @Size(max = 120)
     private String password;
 
-<<<<<<< Updated upstream
-    private Boolean active = false;
-
-//    @OneToMany
-//    @JsonIgnore
-//    private List<Book> books;
-=======
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -56,16 +48,12 @@ public class User {
     //    @OneToMany
     //    @JsonIgnore
     //    private List<Book> books;
->>>>>>> Stashed changes
 
     public User() {
 
     }
 
-<<<<<<< Updated upstream
-    public Long getUserId() {
-        return userId;
-=======
+
     public User(String firstName,String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,11 +63,10 @@ public class User {
 
     public Long getId() {
         return id;
->>>>>>> Stashed changes
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -114,20 +101,11 @@ public class User {
         this.password = password;
     }
 
-<<<<<<< Updated upstream
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-=======
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
->>>>>>> Stashed changes
     }
 }

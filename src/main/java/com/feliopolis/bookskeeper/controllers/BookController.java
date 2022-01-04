@@ -2,7 +2,6 @@ package com.feliopolis.bookskeeper.controllers;
 
 import com.feliopolis.bookskeeper.models.Author;
 import com.feliopolis.bookskeeper.models.Book;
-import com.feliopolis.bookskeeper.models.User;
 import com.feliopolis.bookskeeper.repositories.BookRepository;
 import com.feliopolis.bookskeeper.repositories.AuthorRepository;
 import com.feliopolis.bookskeeper.repositories.UserRepository;
@@ -51,6 +50,7 @@ public class BookController {
             return new ResponseEntity(new ErrorMessage("404", "Book Not Found"), HttpStatus.NOT_FOUND);
     }
 
+
     @PostMapping
     public Book create(@Valid @RequestBody final Book book) {
         if (!authorRepository.findById(book.getAuthor().getId()).isPresent())
@@ -60,15 +60,27 @@ public class BookController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
-        bookRepository.deleteById(id);
+    public ResponseEntity<Book> delete(@PathVariable Long id) {
+        if (bookRepository.findById(id).isPresent()) {
+            Book book = bookRepository.getById(id);
+            bookRepository.deleteById(id);
+            return new ResponseEntity<Book>(book, HttpStatus.OK);
+        } else
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public Book update(@PathVariable Long id, @RequestBody Book book) {
-        Book savedBook = bookRepository.getById(id);
-        BeanUtils.copyProperties(book, savedBook, "id");
-        return bookRepository.saveAndFlush(savedBook);
+    public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book book) {
+
+        if (!bookRepository.findById(id).isPresent())
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+        else {
+            Book savedBook = bookRepository.getById(id);
+            BeanUtils.copyProperties(book, savedBook, "id");
+            bookRepository.saveAndFlush(savedBook);
+            return new ResponseEntity(savedBook, HttpStatus.OK);
+        }
+
     }
 
 }

@@ -16,6 +16,8 @@ public class ExceptionHandlerController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(javax.validation.ValidationException.class)
     ErrorMessage exceptionHandler(ValidationException e) {
-        return new ErrorMessage("400", e.getMessage());
+        System.out.println("EXCEPTION HANDLER CONTROLLER");
+
+        return new ErrorMessage("500", e.getMessage());
     }
 }

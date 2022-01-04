@@ -2,12 +2,16 @@ package com.feliopolis.bookskeeper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.NotNull;
+import com.feliopolis.bookskeeper.enums.Roles;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -18,25 +22,43 @@ public class User {
     private Long id;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First name required")
+    //@NotNull(message = "First name may not be null")
+    //@NotBlank(message = "First name required")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "First name required")
+    //@NotNull(message = "Last name may not be null")
+    //@NotBlank(message = "Last name required")
     private String lastName;
 
     @Email(message = "Wrong email format")
     private String email;
 
-    @NotBlank(message = "Password required")
+    @NotBlank
+    @Size(max = 120)
     private String password;
 
-//    @OneToMany
-//    @JsonIgnore
-//    private List<Book> books;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+
+    private Set<Role> roles = new HashSet<>();
+
+    //    @OneToMany
+    //    @JsonIgnore
+    //    private List<Book> books;
 
     public User() {
 
+    }
+
+
+    public User(String firstName,String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -77,5 +99,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

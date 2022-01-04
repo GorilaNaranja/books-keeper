@@ -1,6 +1,11 @@
 package com.feliopolis.bookskeeper.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,6 +13,9 @@ import java.time.LocalDate;
 
 @Entity(name = "books")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@NoArgsConstructor
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -28,10 +36,6 @@ public class Book {
 
     @Column(name = "image_url")
     private String imageUrl;
-
-    public Book() {
-
-    }
 
     public Long getId() {
         return id;

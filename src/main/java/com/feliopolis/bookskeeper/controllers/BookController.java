@@ -1,10 +1,8 @@
 package com.feliopolis.bookskeeper.controllers;
 
-import com.feliopolis.bookskeeper.models.Author;
 import com.feliopolis.bookskeeper.models.Book;
 import com.feliopolis.bookskeeper.repositories.BookRepository;
 import com.feliopolis.bookskeeper.repositories.AuthorRepository;
-import com.feliopolis.bookskeeper.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/books")

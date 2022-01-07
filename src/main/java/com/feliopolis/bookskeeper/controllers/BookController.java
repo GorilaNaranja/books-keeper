@@ -24,15 +24,12 @@ public class BookController {
     private AuthorRepository authorRepository;
 
     @GetMapping
-    public List<Book> list() {
-        return bookRepository.findAll();
+    public ResponseEntity list(@RequestParam(value = "author", required = false) Long id) {
+        if (id == null)
+            return new ResponseEntity<List<Book>>(bookRepository.findAll(), HttpStatus.OK);
+        else
+            return new ResponseEntity(bookRepository.findByAuthorId(id), HttpStatus.OK);
     }
-
-    //@GetMapping
-    //@RequestMapping
-    //Iterable<Author> findByQuery(@RequestParam(value = "author", required = false) String author) {
-    //    return bookRepository.findByAuthor(author);
-    //}
 
     @GetMapping
     @RequestMapping("{id}")
@@ -43,13 +40,12 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book Not Found");
     }
 
-
     @PostMapping
-    public Book create(@Valid @RequestBody final Book book) {
-        if(!authorRepository.findById(book.getAuthor().getId()).isPresent())
+    public ResponseEntity<Book> create(@Valid @RequestBody final Book book) {
+        if (!authorRepository.findById(book.getAuthor().getId()).isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author Not Found");
         else
-            return bookRepository.saveAndFlush(book);
+            return new ResponseEntity<Book>(bookRepository.saveAndFlush(book), HttpStatus.OK);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)

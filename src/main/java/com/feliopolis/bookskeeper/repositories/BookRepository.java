@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Iterable<Author> findByAuthor(String author);
+    Iterable<Book> findByAuthorId(Long id);
 
 }

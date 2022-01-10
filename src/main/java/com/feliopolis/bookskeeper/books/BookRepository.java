@@ -3,8 +3,10 @@ package com.feliopolis.bookskeeper.books;
 import com.feliopolis.bookskeeper.books.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Iterable<Book> findByAuthorId(Long id);
+    List<Book> findByAuthorId(Long id);
 
 }

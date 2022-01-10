@@ -1,9 +1,8 @@
 package com.feliopolis.bookskeeper.config;
 
-import com.feliopolis.bookskeeper.security.AuthTokenFilter;
-import com.feliopolis.bookskeeper.services.UserDetailsServiceImpl;
+import com.feliopolis.bookskeeper.commons.security.AuthTokenFilter;
+import com.feliopolis.bookskeeper.users.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,13 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.feliopolis.bookskeeper.security.AuthEntryPointJwt;
+import com.feliopolis.bookskeeper.commons.security.AuthEntryPointJwt;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.Arrays;
 

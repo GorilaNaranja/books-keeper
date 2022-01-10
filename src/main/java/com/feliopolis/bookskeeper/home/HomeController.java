@@ -1,4 +1,4 @@
-package com.feliopolis.bookskeeper.commons.controllers;
+package com.feliopolis.bookskeeper.home;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

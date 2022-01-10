@@ -3,11 +3,19 @@ package com.feliopolis.bookskeeper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.feliopolis.bookskeeper.enums.Roles;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 
 @Entity(name = "roles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -17,22 +25,4 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    public Role() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Roles getRole() {
-        return role;
-    }
-
-    public void setRole(Roles role) {
-        this.role = role;
-    }
 }

@@ -1,6 +1,5 @@
 package com.feliopolis.bookskeeper.controllers;
 
-import com.feliopolis.bookskeeper.models.Author;
 import com.feliopolis.bookskeeper.models.Book;
 import com.feliopolis.bookskeeper.repositories.BookRepository;
 import com.feliopolis.bookskeeper.repositories.AuthorRepository;
@@ -15,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -50,13 +48,12 @@ public class BookController {
             return new ResponseEntity(new ErrorMessage("404", "Book Not Found"), HttpStatus.NOT_FOUND);
     }
 
-
     @PostMapping
     public Book create(@Valid @RequestBody final Book book) {
         if (!authorRepository.findById(book.getAuthor().getId()).isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author Not Found");
         else
-            return bookRepository.saveAndFlush(book);
+            return new ResponseEntity<Book>(bookRepository.saveAndFlush(book), HttpStatus.OK);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)

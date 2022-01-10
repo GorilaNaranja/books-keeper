@@ -1,4 +1,4 @@
-package com.feliopolis.bookskeeper.commons.controllers;
+package com.feliopolis.bookskeeper.config;
 
 import com.feliopolis.bookskeeper.commons.utils.ErrorMessage;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.validation.ValidationException;
 
 @ControllerAdvice
-public class ExceptionHandlerController {
+public class ExceptionHandlerControllerAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)

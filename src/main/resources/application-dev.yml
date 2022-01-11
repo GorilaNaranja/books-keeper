@@ -1,20 +1,12 @@
 app:
-    jwtCookieName: BooksCookies
-    jwtExpirationMs: 86400000
-    jwtSecret: BooksSecretKey
     version: 1.0.0
-book:
-    service:
-        performance: false
 server:
-    error:
-        include-message: ALWAYS
     port: 5000
 spring:
     datasource:
-        password: root
-        url: jdbc:postgresql://localhost:5432/books-keeper-db
-        username: postgres
+        password: ${DB_PASSWORD}
+        url: ${DB_URL}
+        username: ${DB_USER}
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:

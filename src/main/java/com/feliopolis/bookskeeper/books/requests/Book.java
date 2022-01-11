@@ -1,4 +1,4 @@
-package com.feliopolis.bookskeeper.books;
+package com.feliopolis.bookskeeper.books.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.feliopolis.bookskeeper.authors.Author;
@@ -21,18 +21,13 @@ import java.time.LocalDate;
 @Setter
 public class Book {
 
-    // TODO: review validations
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "author_id", nullable = false)
-    //@NotNull(message = "Author may not be null")
-    private Author author;
+    @Column(name = "author_id")
+    private Long authorId;
 
-    //@NotBlank(message = "Name may not be blank")
     private String name;
 
     private String description;

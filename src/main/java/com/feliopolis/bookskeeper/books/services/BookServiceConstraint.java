@@ -1,22 +1,27 @@
-package com.feliopolis.bookskeeper.books;
+package com.feliopolis.bookskeeper.books.services;
 
 import com.feliopolis.bookskeeper.authors.AuthorRepository;
+import com.feliopolis.bookskeeper.books.requests.Book;
+import com.feliopolis.bookskeeper.books.BookRepository;
+import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
+import com.feliopolis.bookskeeper.books.InvalidBookDataException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
-public class BookService {
+public class BookServiceConstraint implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
+    @Override
     public List<Book> getBooks(Long authorId) {
         if (authorId == null)
             return bookRepository.findAll();
@@ -24,21 +29,32 @@ public class BookService {
             return bookRepository.findByAuthorId(authorId);
     }
 
-    public Book getBook(Long id) {
-        if (bookRepository.findById(id).isPresent())
-            return bookRepository.getById(id);
-        else
-            // TODO: throw exception not working?
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book Not Found");
+    @Override
+    public Optional<Book> getBook(Long id) {
+        return bookRepository.findById(id);
     }
 
-    public Book createBook(Book book) {
-        if (!authorRepository.findById(book.getAuthor().getId()).isPresent())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author Not Found");
-        else
+    @Override
+    public Book createBook(CreateBookRequest createBookRequest) throws InvalidBookDataException {
+
+        try {
+            var book = new Book(null,
+                    createBookRequest.getAuthorId(),
+                    createBookRequest.getName(),
+                    createBookRequest.getDescription(),
+                    createBookRequest.getDate(),
+                    createBookRequest.getImageUrl());
             return bookRepository.saveAndFlush(book);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                throw new InvalidBookDataException(e.getCause());
+            }
+            throw e;
+        }
+
     }
 
+    @Override
     public Book editBook(Long id, Book book) {
         // TODO: 3 queries needed?
         // TODO: require all fields, if not return null
@@ -53,6 +69,7 @@ public class BookService {
         }
     }
 
+    @Override
     public Book deleteBook(Long id) {
         // TODO: 3 queries needed?
         if (bookRepository.findById(id).isPresent()) {

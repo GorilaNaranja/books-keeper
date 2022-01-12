@@ -2,6 +2,7 @@ package com.feliopolis.bookskeeper.books;
 
 import com.feliopolis.bookskeeper.books.requests.Book;
 import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
+import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
 import com.feliopolis.bookskeeper.books.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    // TODO: try catch, exception type?
+    // TODO: try catch, why not orElseThrow in delete?
 
     @GetMapping
     public ResponseEntity list(@RequestParam(value = "author", required = false) Long authorId) {
@@ -50,31 +51,23 @@ public class BookController {
         } catch (InvalidBookDataException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity  delete(@PathVariable Long id) throws InvalidBookDataException {
-
-//        return bookService
-//                .deleteBook(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
-
+    public Book delete(@PathVariable Long id) throws InvalidBookDataException {
         try {
-            return new ResponseEntity(bookService.deleteBook(id), HttpStatus.OK);
+            return bookService.deleteBook(id);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book book) {
+    public Book update(@PathVariable Long id, @RequestBody EditBookRequest book) {
         try {
-            return new ResponseEntity(bookService.editBook(id, book), HttpStatus.OK);
+            return bookService.editBook(id, book);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

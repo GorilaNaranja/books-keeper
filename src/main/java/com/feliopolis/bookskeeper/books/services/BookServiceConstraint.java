@@ -5,6 +5,7 @@ import com.feliopolis.bookskeeper.books.requests.Book;
 import com.feliopolis.bookskeeper.books.BookRepository;
 import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
+import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.BeanUtils;
@@ -55,7 +56,7 @@ public class BookServiceConstraint implements BookService {
     }
 
     @Override
-    public Book editBook(Long id, Book book) {
+    public Book editBook(Long id, EditBookRequest book) {
         // TODO: 3 queries needed?
         // TODO: require all fields, if not return null
         // TODO: now returns complete author, return only author id

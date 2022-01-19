@@ -2,10 +2,7 @@ package com.feliopolis.bookskeeper.books.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.feliopolis.bookskeeper.authors.Author;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -17,6 +14,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Book {

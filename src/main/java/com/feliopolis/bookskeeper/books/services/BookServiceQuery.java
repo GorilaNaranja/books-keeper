@@ -1,13 +1,16 @@
 package com.feliopolis.bookskeeper.books.services;
 
 import com.feliopolis.bookskeeper.authors.AuthorRepository;
+import com.feliopolis.bookskeeper.books.BookCache;
 import com.feliopolis.bookskeeper.books.requests.Book;
 import com.feliopolis.bookskeeper.books.BookRepository;
 import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
+import com.feliopolis.bookskeeper.commons.utils.JsonNullableUtils;
 import com.zaxxer.hikari.util.PropertyElf;
 import lombok.RequiredArgsConstructor;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -30,6 +33,7 @@ public class BookServiceQuery implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final BookCache bookCache;
 
     @Override
     public List<Book> getBooks(Long authorId) {
@@ -42,7 +46,8 @@ public class BookServiceQuery implements BookService {
 
     @Override
     public Optional<Book> getBook(Long id) {
-        return bookRepository.findById(id);
+        return bookCache.findById(id);
+        //return bookRepository.findById(id);
     }
 
     @Override
@@ -83,10 +88,21 @@ public class BookServiceQuery implements BookService {
         // save(updatedEntity);
         // return dto;
 
-        // TODO: edit only requested fields
         Book bookDB = bookRepository.getById(id);
-        BeanUtils.copyProperties(bookDB, editBookRequest);
+
+        // JsonNullableUtils.changeIfPresent(editBookRequest.getName(), bookDB::setName);
+        // JsonNullableUtils.changeIfPresent(editBookRequest.getDescription(), bookDB::setDescription);
+        // JsonNullableUtils.changeIfPresent(editBookRequest.getDate(), bookDB::setDate);
+        // JsonNullableUtils.changeIfPresent(editBookRequest.getImageUrl(), bookDB::setImageUrl);
+        // JsonNullableUtils.changeIfPresent(editBookRequest.getAuthorId(), bookDB::setAuthorId);
+
         bookRepository.save(bookDB);
+        bookCache.deleteById(id);
+
+        // TODO: edit only requested fields
+        // Book bookDB = bookRepository.getById(id);
+        // BeanUtils.copyProperties(bookDB, editBookRequest);
+        // bookRepository.save(bookDB);
 
         // bean utils will copy non null values from toBePatched to fromDb manager.
         // BeanUtils beanUtils = null;
@@ -103,6 +119,8 @@ public class BookServiceQuery implements BookService {
         }
         Book book = bookRepository.getById(id);
         bookRepository.deleteById(id);
+        bookCache.deleteById(id);
+
         return book;
     }
 

@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -68,23 +70,25 @@ class BookCacheTest {
     @Test
     void cachePassivation() {
 
-        // TODO: fix test
-
-        var books = LongStream.range(0, 100)
+        var books = LongStream.range(1, 101)
                 .mapToObj(id -> Book.builder().id(id).build())
                 .collect(Collectors.toList());
 
         books.forEach(book -> when(mockBookRepository.findById(eq(book.getId()))).thenReturn(Optional.of(book)));
 
-        books.forEach(book -> cache.findById(book.getId()));
+        // Search 1->100
         books.forEach(book -> cache.findById(book.getId()));
 
-        LongStream.range(0, 10)
+        // Trick reverse search 100 -> 1
+        Collections.reverse(books);
+        books.forEach(book -> cache.findById(book.getId()));
+
+        LongStream.range(1, 11)
                 .forEach(id -> {
                     verify(mockBookRepository, times(2)).findById(eq(id));
                 });
 
-        LongStream.range(11, 99)
+        LongStream.range(11, 101)
                 .forEach(id -> {
                     verify(mockBookRepository, times(1)).findById(eq(id));
                 });

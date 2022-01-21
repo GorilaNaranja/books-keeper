@@ -5,6 +5,7 @@ import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
 import com.feliopolis.bookskeeper.books.services.BookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
 
     /*
@@ -67,6 +70,7 @@ public class BookController {
         try {
             return bookService.editBook(id, book);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

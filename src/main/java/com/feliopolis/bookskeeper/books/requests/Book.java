@@ -14,9 +14,8 @@ import java.time.LocalDate;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @NoArgsConstructor
-@Builder
-@Getter
-@Setter
+@Builder(toBuilder = true)
+@Data
 public class Book {
 
     @Id

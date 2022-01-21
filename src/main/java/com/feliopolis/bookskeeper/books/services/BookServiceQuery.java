@@ -7,20 +7,12 @@ import com.feliopolis.bookskeeper.books.BookRepository;
 import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
-import com.feliopolis.bookskeeper.commons.utils.JsonNullableUtils;
-import com.zaxxer.hikari.util.PropertyElf;
+import com.feliopolis.bookskeeper.commons.utils.NullBeanUtils;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.jackson.nullable.JsonNullable;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.beans.FeatureDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class BookServiceQuery implements BookService {
@@ -72,56 +64,40 @@ public class BookServiceQuery implements BookService {
     }
 
     @Override
-    public Book editBook(Long id, EditBookRequest editBookRequest) throws InvalidBookDataException {
-        if (authorRepository.findById(editBookRequest.getAuthorId()).isEmpty()) {
-            throw new InvalidBookDataException(String.format("Author doesn't exist: %d", editBookRequest.getAuthorId()));
-        }
-        if (bookRepository.findById(id).isEmpty()) {
+    public Book editBook(Long id, EditBookRequest editBookRequest) throws InvalidBookDataException, InvocationTargetException, IllegalAccessException {
+
+        var possibleBookDB = bookCache.findById(id);
+
+        if (possibleBookDB.isEmpty()) {
             throw new InvalidBookDataException("Book doesn't exist: " + id);
         }
+        if (editBookRequest.getAuthorId() != null && authorRepository.findById(editBookRequest.getAuthorId()).isEmpty()) {
+            throw new InvalidBookDataException(String.format("Author doesn't exist: %d", editBookRequest.getAuthorId()));
+        }
 
-        //https://stackoverflow.com/questions/17860520/spring-mvc-patch-method-partial-updates
-        // Entity entity = repo.get(id);
-        // DTO dto = mapper.map(entity, dtoClass);
-        // mapper.map(patchValues, dto);
-        // Entity updatedEntity = toEntity(dto);
-        // save(updatedEntity);
-        // return dto;
+        var dbBook = possibleBookDB.get();
 
-        Book bookDB = bookRepository.getById(id);
+        NullBeanUtils.getInstance().copyProperties(dbBook, editBookRequest);
 
-        // JsonNullableUtils.changeIfPresent(editBookRequest.getName(), bookDB::setName);
-        // JsonNullableUtils.changeIfPresent(editBookRequest.getDescription(), bookDB::setDescription);
-        // JsonNullableUtils.changeIfPresent(editBookRequest.getDate(), bookDB::setDate);
-        // JsonNullableUtils.changeIfPresent(editBookRequest.getImageUrl(), bookDB::setImageUrl);
-        // JsonNullableUtils.changeIfPresent(editBookRequest.getAuthorId(), bookDB::setAuthorId);
-
-        bookRepository.save(bookDB);
+        bookRepository.save(dbBook);
         bookCache.deleteById(id);
 
-        // TODO: edit only requested fields
-        // Book bookDB = bookRepository.getById(id);
-        // BeanUtils.copyProperties(bookDB, editBookRequest);
-        // bookRepository.save(bookDB);
+        return dbBook;
 
-        // bean utils will copy non null values from toBePatched to fromDb manager.
-        // BeanUtils beanUtils = null;
-        // beanUtils.copyProperties(bookDB, editBookRequest);
-        // updateManager(fromDb);
-
-        return bookDB;
     }
 
     @Override
     public Book deleteBook(Long id) throws InvalidBookDataException {
-        if (bookRepository.findById(id).isEmpty()) {
+        var possibleBook = bookCache.findById(id);
+
+        if (possibleBook.isEmpty()) {
             throw new InvalidBookDataException("Book doesn't exist: " + id);
         }
-        Book book = bookRepository.getById(id);
+
         bookRepository.deleteById(id);
         bookCache.deleteById(id);
 
-        return book;
+        return possibleBook.get();
     }
 
 }

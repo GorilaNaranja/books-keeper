@@ -5,6 +5,7 @@ import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public interface BookService {
 
     Book createBook(CreateBookRequest book) throws InvalidBookDataException;
 
-    Book editBook(Long id, EditBookRequest book) throws InvalidBookDataException;
+    Book editBook(Long id, EditBookRequest book) throws InvalidBookDataException, InvocationTargetException, IllegalAccessException;
 
     Book deleteBook(Long id) throws InvalidBookDataException;
 }

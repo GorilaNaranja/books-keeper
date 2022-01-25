@@ -1,20 +1,17 @@
-package com.feliopolis.bookskeeper.authors;
+package com.feliopolis.bookskeeper.authors.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Entity(name = "authors")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @NoArgsConstructor
-@Getter
-@Setter
+@Builder(toBuilder = true)
+@Data
 public class Author {
 
     //@Id
@@ -27,15 +24,9 @@ public class Author {
     private Long id;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First name cannot be blank")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Last name cannot be blank")
     private String lastName;
-
-//    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<Book> books;
 
 }

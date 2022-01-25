@@ -1,76 +1,82 @@
 package com.feliopolis.bookskeeper.authors;
 
-import com.feliopolis.bookskeeper.commons.utils.FieldErrorMessage;
-import org.springframework.beans.BeanUtils;
+import com.feliopolis.bookskeeper.authors.requests.Author;
+import com.feliopolis.bookskeeper.authors.requests.CreateAuthorRequest;
+import com.feliopolis.bookskeeper.authors.requests.EditAuthorRequest;
+import com.feliopolis.bookskeeper.authors.services.AuthorService;
+import com.feliopolis.bookskeeper.books.InvalidBookDataException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/api/v1/authors")
+@RequiredArgsConstructor
+@Slf4j
 public class AuthorController {
 
-    @Autowired
-    private AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
     @GetMapping
-    public List<Author> list() {
-        return authorRepository.findAll();
+    public ResponseEntity list() {
+        try {
+            return new ResponseEntity<List<Author>>(authorService.getAuthors(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @GetMapping
-    @RequestMapping("{id}")
+    @GetMapping("/{id}")
     public Author get(@PathVariable Long id) {
-        return authorRepository.getById(id);
+        return authorService
+                .getAuthor(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
     }
 
-    @GetMapping
-    @RequestMapping("/search")
-    Iterable<Author> findByQuery(@RequestParam(value = "name", required = false) String firstName) {
-        return authorRepository.findByFirstName(firstName);
+    @GetMapping("/search")
+    public ResponseEntity findByFirstName(@RequestParam(value = "name", required = true) String firstName) {
+        try {
+            return new ResponseEntity<List<Author>>(authorService.getAuthorByFirstName(firstName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
-    public Author create(@Valid @RequestBody Author author) {
-        return authorRepository.save(author);
+    public Author create(@Valid @RequestBody final CreateAuthorRequest author) {
+        try {
+            return authorService.createAuthor(author);
+        } catch (InvalidBookDataException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
-        authorRepository.deleteById(id);
+    @DeleteMapping("/{id}")
+    public Author delete(@PathVariable Long id) throws InvalidBookDataException {
+        try {
+            return authorService.deleteAuthor(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Author> update(@PathVariable Long id, @RequestBody Author author) {
-        System.out.println(authorRepository.findById(id).isPresent());
-        if (authorRepository.findById(id).isPresent()) {
-            Author savedAuthor = authorRepository.getById(id);
-            BeanUtils.copyProperties(author, savedAuthor, "id");
-            authorRepository.saveAndFlush(savedAuthor);
-            return new ResponseEntity(savedAuthor, HttpStatus.OK);
-        } else
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author Not Found");
+    @PatchMapping("/{id}")
+    public Author update(@PathVariable Long id, @RequestBody EditAuthorRequest author) {
+        try {
+            return authorService.editAuthor(id, author);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
-
-    @Validated
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    List<FieldErrorMessage> exceptionHandle(MethodArgumentNotValidException e) {
-        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-        List<FieldErrorMessage> fieldErrorMessages = fieldErrors.stream().map(fieldError -> new FieldErrorMessage(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
-
-        return fieldErrorMessages;
-    }
-
 
 }
 

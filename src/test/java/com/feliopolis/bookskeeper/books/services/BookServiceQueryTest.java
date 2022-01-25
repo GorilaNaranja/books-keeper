@@ -1,6 +1,6 @@
 package com.feliopolis.bookskeeper.books.services;
 
-import com.feliopolis.bookskeeper.authors.Author;
+import com.feliopolis.bookskeeper.authors.requests.Author;
 import com.feliopolis.bookskeeper.authors.AuthorRepository;
 import com.feliopolis.bookskeeper.books.BookCache;
 import com.feliopolis.bookskeeper.books.BookRepository;

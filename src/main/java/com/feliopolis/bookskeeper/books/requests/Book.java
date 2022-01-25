@@ -1,13 +1,10 @@
 package com.feliopolis.bookskeeper.books.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feliopolis.bookskeeper.authors.Author;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity(name = "books")

@@ -5,6 +5,7 @@ import com.feliopolis.bookskeeper.authors.requests.CreateAuthorRequest;
 import com.feliopolis.bookskeeper.authors.requests.EditAuthorRequest;
 import com.feliopolis.bookskeeper.authors.services.AuthorService;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/authors")
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = {"Authors"})
 public class AuthorController {
 
     private final AuthorService authorService;

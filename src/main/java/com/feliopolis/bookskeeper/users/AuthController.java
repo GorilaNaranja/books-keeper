@@ -5,6 +5,7 @@ import com.feliopolis.bookskeeper.roles.Role;
 import com.feliopolis.bookskeeper.roles.RoleRepository;
 import com.feliopolis.bookskeeper.commons.security.JwtUtils;
 import com.feliopolis.bookskeeper.commons.utils.*;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Api(tags = {"Auth"})
 public class AuthController {
 
     @Autowired

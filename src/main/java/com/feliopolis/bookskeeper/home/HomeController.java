@@ -1,5 +1,6 @@
 package com.feliopolis.bookskeeper.home;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,13 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Api(tags = {"Home"})
 public class HomeController {
 
     @Value("${app.version}")
     private String appVersion;
 
     @GetMapping
-    @RequestMapping("/")
     public Map getStatus() {
 
         Map map = new HashMap<String, String>();

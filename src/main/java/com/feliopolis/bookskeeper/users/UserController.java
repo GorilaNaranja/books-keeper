@@ -1,6 +1,7 @@
 package com.feliopolis.bookskeeper.users;
 
 import com.feliopolis.bookskeeper.commons.utils.*;
+import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Api(tags = {"Users"})
 public class UserController {
 
     @Autowired

@@ -4,6 +4,10 @@ import com.feliopolis.bookskeeper.books.requests.Book;
 import com.feliopolis.bookskeeper.books.requests.CreateBookRequest;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
 import com.feliopolis.bookskeeper.books.services.BookService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import java.util.List;
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = {"Books"})
 public class BookController {
 
     /*

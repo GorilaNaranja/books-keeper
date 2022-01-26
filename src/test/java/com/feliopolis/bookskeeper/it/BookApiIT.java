@@ -64,7 +64,7 @@ public class BookApiIT {
         Optional<Book> expectedDbBook = Optional.of(dbBook);
         when(bookRepository.findById(eq(bookId))).thenReturn(expectedDbBook);
 
-        // HTTP REQUESTS
+        // HTTP REQUESTS NOTES:
         // contentType = lo que devuelve el endpoint
         // accept = lo que espera
 
@@ -77,7 +77,7 @@ public class BookApiIT {
 
     // TODO: to learn
     // swagger
-    // test driven development
     // validation
+    // auth
 
 }

@@ -16,7 +16,7 @@ public class BookCache {
     private static int cacheLimit = 100;
     private static int cacheQuantityToRefresh = 10;
 
-    // Thread safe
+    // Thread safe (synchronized)
     private final LinkedHashMap<Long, Book> cacheById = new LinkedHashMap<>();
 
     public Optional<Book> findById(Long id) {

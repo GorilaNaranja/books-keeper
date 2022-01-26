@@ -7,6 +7,7 @@ import com.feliopolis.bookskeeper.books.BookRepository;
 import com.feliopolis.bookskeeper.books.InvalidBookDataException;
 import com.feliopolis.bookskeeper.books.requests.Book;
 import com.feliopolis.bookskeeper.books.requests.EditBookRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,8 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -84,18 +85,37 @@ class BookServiceQueryTest {
         verify(mockAuthorRepository, times(1)).findById(eq(dbBook.getAuthorId()));
     }
 
+    @Test
+    public void editBookNonExist() throws InvocationTargetException, IllegalAccessException, InvalidBookDataException {
+
+        Long id = 1L;
+        var editBookRequest = EditBookRequest.builder().authorId(4L).name("Edited Name").build();
+        when(bookCache.findById(eq(id))).thenReturn(Optional.empty());
+
+        var exceptionCatched = catchThrowable(() -> {
+            serviceToTest.editBook(id, editBookRequest);
+        });
+
+        assertThat(exceptionCatched)
+                .isInstanceOf(InvalidBookDataException.class)
+                .hasMessageContaining("Book doesn't exist")
+                .hasMessageContaining(id.toString());
+
+        verify(bookCache, times(1)).findById(eq(id));
+    }
+
+//    // Old way testing exceptions
 //    @Test
 //    public void editBookNonExist() throws InvocationTargetException, IllegalAccessException, InvalidBookDataException {
-//        Long id = 1L;
-////        var editBookRequest = EditBookRequest.builder().authorId(4L).name("Edited Name").build();
-//        when(bookCache.findById(eq(id))).thenThrow(InvalidBookDataException.class);
-////        serviceToTest.editBook(id, editBookRequest);
-//
-////        assertThatThrownBy(() -> bookCache.findById(eq(id)))
-////                .isInstanceOf(InvalidBookDataException.class)
-////                .hasMessage("Book doesn't exist: 1")
-////                .hasNoCause();
-////        verify(bookCache, times(1)).findById(eq(id));
+//        try {
+//            // Testing logic and call the service
+//            Assertions.fail("Expected illegal argument exception but no exception raised");
+//        } catch (InvalidBookDataException e) {
+//            // Expected exception, test went well!
+//            // check if has that message InvalidBookDataException("Book doesn't exist: " + id)
+//        } catch (Exception e) {
+//            Assertions.fail("Expected illegal argument exception but I got: " + e);
+//        }
 //    }
 
 //    @Test

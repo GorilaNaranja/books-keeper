@@ -28,8 +28,6 @@ public class AuthorServiceQuery implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    private final EntityManager entityManager;
-
     @Override
     public List<Author> getAuthors() {
         return authorRepository.findAll();

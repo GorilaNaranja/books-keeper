@@ -48,9 +48,6 @@ public class BookApiIT {
     @MockBean
     private RoleRepository roleRepository;
 
-//    @MockBean
-//    private EntityManager entityManager;
-
     @Autowired
     private MockMvc mvc;
 

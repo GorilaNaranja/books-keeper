@@ -12,6 +12,5 @@ Run > Edit configurations > VM options > add the next command option "-Dspring.p
 
 ### Swagger
 
-http://localhost:5000/v2/api-docs
-
+http://localhost:5000/v2/api-docs  
 http://localhost:5000/swagger-ui.html
